@@ -6,18 +6,11 @@
 
 import csv
 import helpers
+import pandas as pd
+from exceptions import NotImplementedError, InvalidDimensionError, InvalidWritePath
 from os import remove as file_remove
 from os.path import exists as file_exists
 
-
-class NotImplementedError(Exception):
-    pass
-
-class InvalidDimensionError(Exception):
-    pass
-
-class InvalidWritePath(Exception):
-    pass
 
 class DataProc():
     HEADER = ["Date", "Description", "Cost"]
@@ -57,6 +50,10 @@ class DataProc():
     def delRow(self, desc, val) -> int:
         raise NotImplementedError("delRow not implemented")
 
+    def editCSV(self, row: int, col: int, file):
+        if not file_exists(file):
+            raise InvalidWritePath("No working CSV file")
+        raise NotImplementedError("Edit CSV not implemented")
 
 if __name__ == "__main__":
     print("DatProc")
