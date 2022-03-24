@@ -22,7 +22,7 @@ into google sheets automatically.</p>
 <p>Constraints:
 <p>&nbsp;&nbsp;&nbsp;&nbsp;Practical inexperience will cause a problem when trying to utilize API and SMS using python.</p></p>
 
-# Phase 1: Internal Structure
+# Phase 1: Internal Structure - Completed 3/24/22
 
 <p>
 The FTS system will first use a python structure to process data into an existing CSV file. This will be done by a class that
