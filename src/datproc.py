@@ -4,17 +4,21 @@
 #   Description
 #   Cost
 
+import re
 import csv
 import helpers
 import pandas as pd
 from exceptions import NotImplementedError, InvalidDimensionError, InvalidWritePath
+from os import getcwd, listdir
 from os import remove as file_remove
 from os.path import exists as file_exists
 
 
 class DataProc():
     HEADER = ["Date", "Description", "Cost"]
-    FILE_PATH = '../Out/fts_dat.csv'
+    FILE_PATH =  getcwd() + '/../Out/fts_dat.csv'
+    REGULAR_EXPRESSION = r"^fts_dat(\(\d\))?.csv$"
+
     def __init__(self) -> None:
         pass
 
@@ -27,7 +31,13 @@ class DataProc():
                 writer.writerow(self.header)
         else:
             # this path will create a new file with new added or subtracted headers
-            raise NotImplementedError("createCSV path not implemented")
+            # self.file = self.file[:-3] + '(%d)'.format(len[]) + .csv
+            cf = len([f for f in listdir(path='../Out') if re.match(DataProc.REGULAR_EXPRESSION,f)])
+            self.file = getcwd() + f'/../Out/fts_dat({cf}).csv'
+            with open(self.file, 'w+', encoding='UTF8', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(self.header)
+            # cf = len([f for f in listdir(path='../Out') if f.startswith('') and f.endswith('.csv')])
 
     def writeRow(self, row: []) -> int:
         if len(row) != len(self.header):
@@ -60,8 +70,4 @@ if __name__ == "__main__":
     s = DataProc()
     # ctr + / to chunk comment
     s = DataProc()
-    s.delCSV(s.FILE_PATH)
-    s.createCSV()
-    s.writeRow(['Test','',123])
-    s.writeRow(['test',None,321])
-    s.writeRow(['yes',2,1])
+    s.delCSV(getcwd()+f"/../Out/fts_dat(10).csv")
