@@ -7,7 +7,7 @@
 import re
 import csv
 import helpers
-from exceptions import NotImplementedError, InvalidDimensionError, InvalidWritePath
+from exceptions import InvalidDimensionError, InvalidWritePath
 from os import getcwd, remove
 from os.path import exists
 
@@ -65,17 +65,25 @@ class DataProc:
         with open(self.file, 'r') as rf:
             lines = csv.reader(rf)
             lines = [line for line in lines]
+        if row >= len(lines): raise IndexError(f"Row of {row} is out of bounds")
         with open(self.file, 'w', encoding='UTF8', newline='') as wf:
             for c, line in enumerate(lines):
                 if c != row:
                     writer = csv.writer(wf)
                     writer.writerow(line)
 
-    def editCSV(self, row: int, col: int, file: str):
-        # TODO: ALLOW FOR CELL EDITS
-        if not exists(file):
-            raise InvalidWritePath("No working CSV file")
-        raise NotImplementedError("Edit CSV not implemented")
+    def editCSV(self, row: int, col: int, edit: str):
+        if col >= len(self.header): raise IndexError(f"Column of {col} is out of bounds")
+        with open(self.file, 'r') as rf:
+            lines = csv.reader(rf)
+            lines = [line for line in lines]
+        if row >= len(lines): raise IndexError(f"Row of {row} is out of bounds")
+        with open(self.file, 'w', encoding='UTF8', newline='') as wf:
+            for i, line in enumerate(lines):
+                if i == row:
+                    line[col] = edit
+                writer = csv.writer(wf)
+                writer.writerow(line)
 
     def readCSV(self, print_header=False) -> str:
         with open(self.file, 'r') as rf:
@@ -96,6 +104,7 @@ class DataProc:
                     return line
 
     def readCol(self, col):
+        if col >= len(self.header): raise IndexError(f"Column of {col} is out of bounds")
         with open(self.file, 'r') as rf:
             lines = csv.reader(rf)
             col_array = []
@@ -130,8 +139,8 @@ if __name__ == "__main__":
     s.writeRows([['Chicken',20],['Beef', 10],["Asparagus", 15]])
     s.readCSV(True)
     print(s.readCol(1))
-
-    s.delRow(1)
+    s.editCSV(1,2,'5')
+    s.editCSV(1,3,2)
     # s.readCSV(True)
     # s.readRow(1)
     # s.delRow(2)
