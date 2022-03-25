@@ -96,11 +96,19 @@ class DataProc:
                     return line
 
     def readCol(self, col):
-        # TODO: READ SPECIFIC COLUMNS
-        pass
-
-    def updateFile(self, file):
-        self.file = helpers.parsefile(file)
+        with open(self.file, 'r') as rf:
+            lines = csv.reader(rf)
+            col_array = []
+            header = next(lines)
+            print(f'Column: {header[col]}')
+            for line in lines:
+                if len(line) < col:
+                    col_array.append(None)
+                    print(None)
+                else:
+                    col_array.append(line[col])
+                    print(line[col])
+        return col_array
 
     @staticmethod
     def delCSV(path: str) -> bool:
@@ -121,6 +129,8 @@ if __name__ == "__main__":
     s.createCSV()
     s.writeRows([['Chicken',20],['Beef', 10],["Asparagus", 15]])
     s.readCSV(True)
+    print(s.readCol(1))
+
     s.delRow(1)
     # s.readCSV(True)
     # s.readRow(1)
